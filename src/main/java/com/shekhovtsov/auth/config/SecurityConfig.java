@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .cors().disable()
                 .authorizeRequests()
-                .antMatchers("/public", "/auth" , "/registration").permitAll() // публичные ресурсы доступны всем
+                .antMatchers("/public", "/auth" , "/reg").permitAll() // публичные ресурсы доступны всем
                 .anyRequest().authenticated() // все остальные запросы требуют аутентификации
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
