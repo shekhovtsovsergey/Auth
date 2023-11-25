@@ -13,23 +13,34 @@ public class JwtUtil {
     private String secret;
 
     public Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser()
+        System.out.println("Token received: " + token);
+        Claims claims = Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
+        System.out.println("Token parsed: " + claims);
+        return claims;
     }
 
     private boolean isTokenExpired(String token) {
-        return this.getAllClaimsFromToken(token).getExpiration().before(new Date());
+        System.out.println("Checking token expiration");
+        Date expirationDate = this.getAllClaimsFromToken(token).getExpiration();
+        boolean isExpired = expirationDate != null && expirationDate.before(new Date());
+        System.out.println("Token expiration status: " + (isExpired ? "Expired" : "Not expired"));
+        return isExpired;
     }
 
     public boolean isInvalid(String token) {
-        return this.isTokenExpired(token);
+        System.out.println("Checking token validity");
+        boolean isInvalid = isTokenExpired(token);
+        System.out.println("Token validity: " + (isInvalid ? "Invalid" : "Valid"));
+        return isInvalid;
     }
 
     public boolean isValid(String token) {
-        // добавлен метод isValid, который возвращает true, если токен не истек и не является недействительным
-        return !isInvalid(token);
+        System.out.println("Checking token validity");
+        boolean isValid = !isInvalid(token);
+        System.out.println("Token validity: " + (isValid ? "Valid" : "Invalid"));
+        return isValid;
     }
-
 }

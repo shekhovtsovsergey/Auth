@@ -1,7 +1,11 @@
 package com.shekhovtsov.auth.service;
 
+import io.jsonwebtoken.Claims;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -11,6 +15,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 
 public class JwtAuthorizationFilter extends GenericFilterBean {
 
@@ -31,7 +36,7 @@ public class JwtAuthorizationFilter extends GenericFilterBean {
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 String token = authorizationHeader.substring(7); // remove "Bearer " prefix
                 if (jwtUtil.isValid(token)) {
-                    Authentication authentication = (Authentication) jwtUtil.getAllClaimsFromToken(token);
+                    Authentication authentication = convertClaimsToAuthentication(jwtUtil.getAllClaimsFromToken(token));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
@@ -42,4 +47,17 @@ public class JwtAuthorizationFilter extends GenericFilterBean {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
         }
     }
+
+    public Authentication convertClaimsToAuthentication(Claims claims) {
+        String username = claims.getSubject();
+
+        // You can retrieve additional information from claims object as needed
+
+        // Create a User object with the username and any additional information
+        User userDetails = new User(username, "", Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+
+        // Create an Authentication object with the User object and set its authenticated flag to true
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
 }

@@ -30,8 +30,14 @@ public class AuthController {
         return jwtTokenService.createAuthTokenAndRegisterUser(registrationUserDto);
     }
 
-    @GetMapping("/api/public/")
+    @GetMapping("/public")
     public ResponseEntity<?> getPublicResource() {
         return ResponseEntity.ok("This is a public resource");
+    }
+
+
+    @GetMapping("/protected")
+    public ResponseEntity<?> getProtectedResource() {
+        return ResponseEntity.ok("This is a protected resource");
     }
 }
