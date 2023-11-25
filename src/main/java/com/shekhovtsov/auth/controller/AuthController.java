@@ -5,6 +5,7 @@ import com.shekhovtsov.auth.dto.RegistrationUserDto;
 import com.shekhovtsov.auth.service.JwtTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,5 +28,10 @@ public class AuthController {
     @PostMapping("/registration")
     public ResponseEntity<?> createAuthTokenAndRegisterUser(@RequestBody RegistrationUserDto registrationUserDto) {
         return jwtTokenService.createAuthTokenAndRegisterUser(registrationUserDto);
+    }
+
+    @GetMapping("/api/public/")
+    public ResponseEntity<?> getPublicResource() {
+        return ResponseEntity.ok("This is a public resource");
     }
 }
