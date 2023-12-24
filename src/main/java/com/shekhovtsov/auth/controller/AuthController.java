@@ -68,10 +68,41 @@ public class AuthController {
         }
     }
 
-    //просмотр профиля
-    //проверка токена
+
+    @PutMapping("/profile")
+    public User updateProfile(@RequestHeader("Authorization") String authorizationHeader, @RequestBody RegistrationUserDto profileData) throws NotFoundException, JwtException {
+        try {
+            String token = authorizationHeader.replace("Bearer ", "");
+            Authentication authentication = jwtAuthorizationFilter.convertClaimsToAuthentication(jwtUtil.getAllClaimsFromToken(token));
+            String username = authentication.getName();
+            if (username != null) {
+                Optional<User> userOptional = userRepository.findByUsername(username);
+                if (userOptional.isPresent()) {
+                    User user = userOptional.get();
+
+                    if (profileData.getUsername() != null) {
+                        user.setUsername(profileData.getUsername());
+                    }
+                    if (profileData.getPassword() != null) {
+                        user.setPassword(profileData.getPassword());
+                    }
+
+                    return userRepository.save(user);
+                } else {
+                    throw new NotFoundException("Пользователь не найден");
+                }
+            } else {
+                throw new NotFoundException("Пользователь не найден");
+            }
+        } catch (JwtException e) {
+            throw new JwtException("Invalid token", e);
+        }
+    }
+
+    //+просмотр профиля
+    //+проверка токена
     //выход  - сделать токен истекшим*
-    //редактирование (post/patch)
+    //+редактирование (post/patch)
     //+порты исправить
 
 
