@@ -6,7 +6,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.server.ServerWebExchange;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
+@Component
 public class JwtAuthorizationFilter extends GenericFilterBean {
 
     private final JwtUtil jwtUtil;
@@ -38,6 +41,7 @@ public class JwtAuthorizationFilter extends GenericFilterBean {
                 if (jwtUtil.isValid(token)) {
                     Authentication authentication = convertClaimsToAuthentication(jwtUtil.getAllClaimsFromToken(token));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+
                 }
             }
 
