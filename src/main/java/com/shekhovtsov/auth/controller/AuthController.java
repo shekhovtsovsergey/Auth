@@ -40,4 +40,12 @@ public class AuthController {
     public ResponseEntity<?> getProtectedResource() {
         return ResponseEntity.ok("This is a protected resource");
     }
+
+    //просмотр профиля
+    //проверка токена
+    //выход  - сделать токен истекшим*
+    //редактирование (post/patch)
+    //порты исправить
+
+
 }
