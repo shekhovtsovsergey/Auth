@@ -2,6 +2,7 @@ package com.shekhovtsov.auth.dto;
 
 
 import lombok.*;
+import org.springframework.jdbc.core.SqlReturnType;
 
 @Getter
 @Setter
@@ -14,4 +15,5 @@ public class RegistrationUserDto {
     private String password;
     private String confirmPassword;
     private String email;
+    private String request;
 }

@@ -84,10 +84,15 @@ public class JwtTokenServiceImpl implements JwtTokenService{
         if (userService.findByUsername(registrationUserDto.getUsername()).isPresent()) {
             return new ResponseEntity<>(new AppErrorDto(HttpStatus.BAD_REQUEST.value(), "A user with this username already exists"), HttpStatus.BAD_REQUEST);
         }
+        if (userService.findByRequest(registrationUserDto.getRequest()).isPresent()) {
+            return new ResponseEntity<>(new AppErrorDto(HttpStatus.BAD_REQUEST.value(), "A user with this request already exists"), HttpStatus.BAD_REQUEST);
+        }
+
         User user = new User();
         user.setEmail(registrationUserDto.getEmail());
         user.setUsername(registrationUserDto.getUsername());
         user.setPassword(passwordEncoder.encode(registrationUserDto.getPassword()));
+        user.setRequest(registrationUserDto.getRequest());
         userService.createUser(user);
 
         UserDetails userDetails = userService.loadUserByUsername(registrationUserDto.getUsername());

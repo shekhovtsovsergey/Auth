@@ -44,4 +44,9 @@ public class UserServiceImpl implements UserDetailsService,UserService {
         user.setRoles(List.of(roleService.getUserRole()));
         userRepository.save(user);
     }
+
+    public Optional<User> findByRequest(String request) {
+        return userRepository.findByRequest(request);
+    }
+
 }

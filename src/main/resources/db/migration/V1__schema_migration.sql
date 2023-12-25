@@ -4,6 +4,7 @@ create table users
     username   varchar(36) not null,
     password   varchar(80) not null,
     email      varchar(50) unique,
+    request_id varchar(50) not null,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp
 );
